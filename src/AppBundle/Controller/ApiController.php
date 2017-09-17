@@ -24,7 +24,7 @@ class ApiController extends Controller
      */
     public function indexAction(Request $request) {
         $schema = new Schema([
-            'query' => Types::query()
+            'query' => Types::query($this->getDoctrine())
         ]);
 
         $this->validateSchemaIfDebug($request, $schema);
@@ -33,7 +33,7 @@ class ApiController extends Controller
         $variables = $request->request->get('variables');
 
         $input = [
-            'query' => trim($query) === "" ? null: $query,
+            'query' => trim($query) === "" ? null : $query,
             'variables' => $variables === "" ? null : $variables
         ];
 
