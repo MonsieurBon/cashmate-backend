@@ -31,8 +31,12 @@ class ApiControllerTest extends GraphQLApiTestCase
     public function testIndexUnknownQueryThrowsException() {
         $client = $this->sendApiQuery('{"query":"query {foobar}","variables":null}');
         $respose = $client->getResponse();
+        $content = $respose->getContent();
+        $json = json_decode($content);
 
-        $this->assertEquals(400, $respose->getStatusCode());
+        $this->assertEquals(200, $respose->getStatusCode());
+        $this->assertTrue(count($json->errors) > 0);
+        $this->assertEquals("Cannot query field \"foobar\" on type \"Query\".", $json->errors[0]->message);
     }
 
     public function testIndexAccounts() {
